@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XRPLクイズ</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .question { margin-bottom: 20px; }
+        button { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>XRPLクイズ</h1>
+    <div id="quiz"></div>
+    <button onclick="checkAnswers()">回答を確認</button>
+    <div id="results"></div>
+
+    <script>
+        const questions = [
+            {
+                question: "XRPLの主な特徴の1つは何ですか？",
+                answers: ["高速な取引処理", "高い取引手数料", "中央集権型の管理", "マイニングの必要性"],
+                correct: 0
+            },
+            {
+                question: "XRPLは主にどのような用途に適していますか？",
+                answers: ["スマートコントラクトの実行", "支払いと金融取引", "ソーシャルメディアの運営", "ファイル共有"],
+                correct: 1
+            },
+            {
+                question: "XRPLのネットワークはどのように維持されていますか？",
+                answers: ["マイナーによる", "中央銀行による", "バリデータによる", "ステーカーによる"],
+                correct: 2
+            },
+            {
+                question: "XRPLの開発に貢献できるのは誰ですか？",
+                answers: ["Ripple社の従業員のみ", "認証された開発者のみ", "誰でも（オープンソース）", "政府機関のみ"],
+                correct: 2
+            },
+            {
+                question: "XRPLの取引履歴はどのように保存されますか？",
+                answers: ["中央サーバーに", "分散型台帳に", "クラウドストレージに", "個々のユーザーのデバイスに"],
+                correct: 1
+            }
+        ];
+
+        function generateQuiz() {
+            const quizContainer = document.getElementById('quiz');
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    <p>${index + 1}. ${q.question}</p>
+                    ${q.answers.map((answer, i) => `
+                        <label>
+                            <input type="radio" name="q${index}" value="${i}">
+                            ${answer}
+                        </label><br>
+                    `).join('')}
+                `;
+                quizContainer.appendChild(questionDiv);
+            });
+        }
+
+        function checkAnswers() {
+            let score = 0;
+            const results = [];
+            questions.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                if (selected && parseInt(selected.value) === q.correct) {
+                    score++;
+                    results.push(`問題${index + 1}: 正解`);
+                } else {
+                    results.push(`問題${index + 1}: 不正解 (正解: ${q.answers[q.correct]})`);
+                }
+            });
+            const resultsContainer = document.getElementById('results');
+            resultsContainer.innerHTML = `
+                <h2>結果</h2>
+                <p>スコア: ${score} / ${questions.length}</p>
+                <ul>${results.map(r => `<li>${r}</li>`).join('')}</ul>
+            `;
+        }
+
+        generateQuiz();
+    </script>
+</body>
+</html>
